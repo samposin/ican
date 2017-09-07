@@ -202,9 +202,11 @@ if (env('GOOGLE_ANALYTICS_TRACKING_ID', '') != '') {
                 <li class="nav-item">
                   <a class="nav-link color-light" href="{{ url('login') }}">{!! trans('website.login') !!}</a>
                 </li>
+                <?php if (\Config::get('auth.allow_registration', true)) { ?>
                 <li class="nav-item">
                   <a class="nav-link color-light" href="{{ url('register') }}">{!! trans('website.register') !!}</a>
                 </li>
+                 <?php } ?>
 <?php } ?>
               </ul>
             </div>

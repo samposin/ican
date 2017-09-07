@@ -115,4 +115,6 @@ return [
         ],
     ],
 
+    'allow_registration'=>env('AUTH_ALLOW_REGISTRATION', true),
+
 ];
