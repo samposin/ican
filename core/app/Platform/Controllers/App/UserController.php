@@ -474,7 +474,29 @@ class UserController extends \App\Http\Controllers\Controller {
       'plan_id' =>request()->input('plan_id', null),
       'reseller_id' =>request()->input('reseller_id', Core\Reseller::get()->id),
       'trial_ends_at' =>request()->input('trial_ends_at', null),
-      'expires' =>request()->input('expires', null)
+      'expires' =>request()->input('expires', null),
+      'metatag' =>request()->input('metatag', null),
+      'business_name' =>request()->input('business_name', null),
+      'manager_name' =>request()->input('manager_name', null),
+      'store_number' =>request()->input('store_number', null),
+      'address' =>request()->input('address', null),
+      'business_type' =>request()->input('business_type', null),
+      'phone' =>request()->input('phone', null),
+      'phone2' =>request()->input('phone2', null),
+      'phone3' =>request()->input('phone3', null),
+      'email_2' =>request()->input('email_2', null),
+      'email_3' =>request()->input('email_3', null),
+      'website_1' =>request()->input('website_1', null),
+      'website_2' =>request()->input('website_2', null),
+      'facebook_url' =>request()->input('facebook_url', null),
+      'instagram_url' =>request()->input('instagram_url', null),
+      'linked_in_url' =>request()->input('linked_in_url', null),
+      'youtube_url' =>request()->input('youtube_url', null),
+	  'notes' =>request()->input('notes', null),
+
+
+
+
     );
 
     $rules = array(
@@ -506,6 +528,27 @@ class UserController extends \App\Http\Controllers\Controller {
       $user->active = $input['active'];
       $user->role = $input['role'];
       $user->password = bcrypt($input['password']);
+
+
+	  $user->metatag = $input['metatag'];
+      $user->business_name = $input['business_name'];
+      $user->manager_name = $input['manager_name'];
+      $user->store_number = $input['store_number'];
+      $user->address = $input['address'];
+      $user->business_type = $input['business_type'];
+      $user->phone = $input['phone'];
+      $user->phone2 = $input['phone2'];
+      $user->phone3 = $input['phone3'];
+      $user->email_2 = $input['email_2'];
+      $user->email_3 = $input['email_3'];
+      $user->website_1 = $input['website_1'];
+      $user->website_2 = $input['website_2'];
+      $user->facebook_url = $input['facebook_url'];
+      $user->instagram_url = $input['instagram_url'];
+      $user->linked_in_url = $input['linked_in_url'];
+      $user->youtube_url = $input['youtube_url'];
+      $user->notes = $input['notes'];
+
 
       if (\Gate::allows('owner-management')) {
         $user->reseller_id = $input['reseller_id'];
@@ -576,7 +619,25 @@ class UserController extends \App\Http\Controllers\Controller {
         'plan_id' =>request()->input('plan_id', null),
         'reseller_id' =>request()->input('reseller_id', null),
         'trial_ends_at' =>request()->input('trial_ends_at', null),
-        'expires' =>request()->input('expires', null)
+        'expires' =>request()->input('expires', null),
+		'metatag' =>request()->input('metatag', null),
+        'business_name' =>request()->input('business_name', null),
+        'manager_name' =>request()->input('manager_name', null),
+        'store_number' =>request()->input('store_number', null),
+        'address' =>request()->input('address', null),
+        'business_type' =>request()->input('business_type', null),
+        'phone' =>request()->input('phone', null),
+        'phone2' =>request()->input('phone2', null),
+        'phone3' =>request()->input('phone3', null),
+        'email_2' =>request()->input('email_2', null),
+        'email_3' =>request()->input('email_3', null),
+        'website_1' =>request()->input('website_1', null),
+        'website_2' =>request()->input('website_2', null),
+        'facebook_url' =>request()->input('facebook_url', null),
+        'instagram_url' =>request()->input('instagram_url', null),
+        'linked_in_url' =>request()->input('linked_in_url', null),
+        'youtube_url' =>request()->input('youtube_url', null),
+	    'notes' =>request()->input('notes', null),
       );
 
       $rules = array(
@@ -602,6 +663,27 @@ class UserController extends \App\Http\Controllers\Controller {
         $user->email = $input['email'];
         $user->timezone = $input['timezone'];
         $user->language = $input['language'];
+
+
+		$user->metatag = $input['metatag'];
+        $user->business_name = $input['business_name'];
+        $user->manager_name = $input['manager_name'];
+        $user->store_number = $input['store_number'];
+        $user->address = $input['address'];
+        $user->business_type = $input['business_type'];
+        $user->phone = $input['phone'];
+        $user->phone2 = $input['phone2'];
+        $user->phone3 = $input['phone3'];
+        $user->email_2 = $input['email_2'];
+        $user->email_3 = $input['email_3'];
+        $user->website_1 = $input['website_1'];
+        $user->website_2 = $input['website_2'];
+        $user->facebook_url = $input['facebook_url'];
+        $user->instagram_url = $input['instagram_url'];
+        $user->linked_in_url = $input['linked_in_url'];
+        $user->youtube_url = $input['youtube_url'];
+        $user->notes = $input['notes'];
+
 
         if ($qs['user_id'] > 1 && \Gate::allows('owner-management')) 
         {
@@ -759,9 +841,9 @@ class UserController extends \App\Http\Controllers\Controller {
     $data = array();
 
     if (\Gate::allows('owner-management')) {
-      $aColumn = array('reseller_name', 'name', 'email', 'role', 'logins', 'last_login', 'users.trial_ends_at', 'plan', 'users.expires', 'users.created_at', 'users.active');
+      $aColumn = array('reseller_name', 'name', 'email', 'role', 'logins', 'last_login', 'users.trial_ends_at', 'plan', 'users.expires', 'users.created_at', 'users.active','metatag');
     } else {      
-      $aColumn = array('name', 'email', 'role', 'logins', 'last_login', 'users.trial_ends_at', 'plan', 'users.expires', 'users.created_at', 'users.active');
+      $aColumn = array('name', 'email', 'role', 'logins', 'last_login', 'users.trial_ends_at', 'plan', 'users.expires', 'users.created_at', 'users.active','metatag',);
     }
 
     if($q != '')
@@ -774,7 +856,8 @@ class UserController extends \App\Http\Controllers\Controller {
           $query->orWhere('email', 'like', '%' . $q . '%')
           ->orWhere('role', 'like', '%' . $q . '%')
           ->orWhere('r.name', 'like', '%' . $q . '%')
-          ->orWhere('users.name', 'like', '%' . $q . '%');
+          ->orWhere('users.name', 'like', '%' . $q . '%')
+          ->orWhere('users.metatag', 'like', '%' . $q . '%');
         })
         ->count();
 
@@ -787,7 +870,8 @@ class UserController extends \App\Http\Controllers\Controller {
           $query->orWhere('email', 'like', '%' . $q . '%')
           ->orWhere('role', 'like', '%' . $q . '%')
           ->orWhere('r.name', 'like', '%' . $q . '%')
-          ->orWhere('users.name', 'like', '%' . $q . '%');
+          ->orWhere('users.name', 'like', '%' . $q . '%')
+          ->orWhere('users.metatag', 'like', '%' . $q . '%');
         })
         ->take($length)->skip($start)->get();
     }
@@ -829,6 +913,7 @@ class UserController extends \App\Http\Controllers\Controller {
         'email' => $row->email,
         'role_name' => $row->role,
         'role' => trans('global.roles.' . $row->role),
+        'metatag' => $row->metatag,
         'logins' => $row->logins,
         'last_login' => $last_login,
         'trial_ends_at' => $trial_ends_at,

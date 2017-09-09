@@ -22,7 +22,9 @@
   </form>
   <div class="form-group m-t-30">
     <div class="col-sm-7"> <a href="{{ url('/login') }}" class="text-muted"><i class="fa fa-sign-in m-r-5"></i> {{ trans('global.log_in') }}</a> </div>
+    <?php if (\Config::get('auth.allow_registration', true)) { ?>
     <div class="col-sm-5 text-right"> <a href="{{ url('/register') }}" class="text-muted">{{ trans('global.create_account') }}</a> </div>
+    <?php } ?>
   </div>
 </div>
 @endsection 

@@ -241,8 +241,81 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
                 <input name="active" id="active" type="checkbox" value="1" checked>
                 <label for="active"> {{ trans('global.active') }}</label>
               </div>
+              <p class="text-muted">{{ trans('global.active_user_desc') }}</p>
             </div>
-            <p class="text-muted">{{ trans('global.active_user_desc') }}</p>
+            <div class="form-group">
+              <label for="metatag">{{ trans('global.metatag') }}</label>
+                <input type="text" class="form-control" id="metatag" name="metatag">
+            </div>
+            <div class="form-group">
+              <label for="business_name">{{ trans('global.business_name') }}</label>
+                <input type="text" class="form-control" id="business_name" name="business_name">
+            </div>
+            <div class="form-group">
+              <label for="manager_name">{{ trans('global.manager_name') }}</label>
+                <input type="text" class="form-control" id="manager_name" name="manager_name">
+            </div>
+            <div class="form-group">
+              <label for="store_number">{{ trans('global.store_number') }}</label>
+                <input type="text" class="form-control" id="store_number" name="store_number">
+            </div>
+            <div class="form-group">
+              <label for="address">{{ trans('global.address') }}</label>
+                <input type="text" class="form-control" id="address" name="address">
+            </div>
+            <div class="form-group">
+              <label for="business_type">{{ trans('global.business_type') }}</label>
+                <input type="text" class="form-control" id="business_type" name="business_type">
+            </div>
+            <div class="form-group">
+              <label for="phone">{{ trans('global.main_phone_number_1') }}</label>
+                <input type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+              <label for="phone2">{{ trans('global.phone_number_2') }}</label>
+                <input type="text" class="form-control" id="phone2" name="phone2">
+            </div>
+            <div class="form-group">
+              <label for="phone3">{{ trans('global.phone_number_3') }}</label>
+                <input type="text" class="form-control" id="phone3" name="phone3">
+            </div>
+            <div class="form-group">
+              <label for="email_2">{{ trans('global.email_2') }}</label>
+                <input type="email" class="form-control" id="email_2" name="email_2">
+            </div>
+            <div class="form-group">
+              <label for="email_3">{{ trans('global.email_3') }}</label>
+                <input type="email" class="form-control" id="email_3" name="email_3">
+            </div>
+            <div class="form-group">
+              <label for="website_1">{{ trans('global.website_1') }}</label>
+                <input type="text" class="form-control" id="website_1" name="website_1">
+            </div>
+            <div class="form-group">
+              <label for="website_2">{{ trans('global.website_2') }}</label>
+                <input type="text" class="form-control" id="website_2" name="website_2">
+            </div>
+            <div class="form-group">
+              <label for="facebook_url">{{ trans('global.facebook_page') }}</label>
+                <input type="text" class="form-control" id="facebook_url" name="facebook_url">
+            </div>
+            <div class="form-group">
+              <label for="instagram_url">{{ trans('global.instagram_page') }}</label>
+                <input type="text" class="form-control" id="instagram_url" name="instagram_url">
+            </div>
+            <div class="form-group">
+              <label for="linked_in_url">{{ trans('global.linked_in_page') }}</label>
+                <input type="text" class="form-control" id="linked_in_url" name="linked_in_url">
+            </div>
+            <div class="form-group">
+              <label for="youtube_url">{{ trans('global.youtube_page') }}</label>
+                <input type="text" class="form-control" id="youtube_url" name="youtube_url">
+            </div>
+            <div class="form-group">
+              <label for="notes">{{ trans('global.notes') }}</label>
+                 <textarea class="form-control" rows="3" id="notes" name="notes"></textarea>
+            </div>
+
           </fieldset>
         </div>
 
