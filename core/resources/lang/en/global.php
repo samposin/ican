@@ -458,6 +458,30 @@ return array(
 	"connections" => "Connections",
 	"no_connections_available_yet" => "There are no connections available yet.",
 
+   /*
+   |--------------------------------------------------------------------------
+   | Business
+   |--------------------------------------------------------------------------
+   */
+	"metatag" => "Metatag",
+	"business_name" => "Business Name",
+	"manager_name" => "Manager Name",
+	"store_number" => "Store Number",
+	"address" => "Address",
+	"business_type" => "Business Type",
+	"main_phone_number_1" => "Main Phone Number 1",
+	"phone_number_2" => "Phone Number 2",
+	"phone_number_3" => "Phone Number 3",
+	"email_2" => "Email 2",
+	"email_3" => "Email 3",
+	"website_1" => "Website 1",
+	"website_2" => "Website 2",
+	"facebook_page" => "Facebook Page",
+	"instagram_page" => "Instagram Page",
+	"linked_in_page" => "Linked In Page",
+	"youtube_page" => "YouTube Page",
+	"notes" => "Notes",
+
   /*
    |--------------------------------------------------------------------------
    | Data Tables

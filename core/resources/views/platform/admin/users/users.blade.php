@@ -83,7 +83,10 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
   }, {
     data: "active",
     width: 60
-  }, {
+  },
+  {
+    data: "metatag"
+  },{
     data: "sl",
     width: 74,
     sortable: false
@@ -145,7 +148,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
 <?php } ?>
           '</div></div>';
       },
-      targets: <?php echo (\Gate::allows('owner-management')) ? '11' : '10'; ?> /* Column to re-render */
+      targets: <?php echo (\Gate::allows('owner-management')) ? '12' : '11'; ?> /* Column to re-render */
     },
   ],
   language: {
@@ -186,6 +189,7 @@ $('#dt-table-admin_users_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.expires') }}</th>
         <th>{{ trans('global.created') }}</th>
         <th class="text-center">{{ trans('global.active') }}</th>
+        <th>{{ trans('global.metatag') }}</th>
         <th class="text-center">{{ trans('global.actions') }}</th>
       </tr>
       </thead>
