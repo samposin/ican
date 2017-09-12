@@ -832,7 +832,8 @@ class UserController extends \App\Http\Controllers\Controller {
 
     if (\Auth::user()->role == 'admin')
     {
-      $sql_role = "role <> 'admin' AND role <> 'owner'";
+      //$sql_role = "role <> 'admin' AND role <> 'owner'";
+      $sql_role = "role <> 'owner'";
     }
 
     $order_by = $request->input('order.0.column', 0);

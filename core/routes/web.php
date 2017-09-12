@@ -106,13 +106,7 @@ Route::group(['middleware' => 'auth:web'], function () {
   Route::post('platform/profile-avatar', '\Platform\Controllers\App\AccountController@postAvatar');
   Route::post('platform/profile-avatar-delete', '\Platform\Controllers\App\AccountController@postDeleteAvatar');
   
-  // -----------------------------------------------------------------
-  // Plan limitation account.plan_visible
-  Route::group(['middleware' => 'limitation:account.plan_visible'], function () {
 
-    // Plan
-    Route::get('platform/plan', '\Platform\Controllers\App\AccountController@showPlan');
-  });
 
   // -----------------------------------------------------------------
   // Plan limitation media.visible
@@ -132,20 +126,31 @@ Route::group(['middleware' => 'auth:web'], function () {
     // User management
     Route::get('platform/admin/users', '\Platform\Controllers\App\UserController@showUsers');
     Route::get('platform/admin/users/data', '\Platform\Controllers\App\UserController@getUserData');
+
+  });
+
+  // For owners and resellers
+  Route::group(['middleware' => 'role:owner,reseller'], function () {
+
+	// -----------------------------------------------------------------
+	  // Plan limitation account.plan_visible
+	  Route::group(['middleware' => 'limitation:account.plan_visible'], function () {
+
+	    // Plan
+	    Route::get('platform/plan', '\Platform\Controllers\App\AccountController@showPlan');
+	  });
+
+	// New user is owner and reseller only
+    Route::get('platform/admin/user/new', '\Platform\Controllers\App\UserController@showNewUser');
+    Route::post('platform/admin/user/new', '\Platform\Controllers\App\UserController@postNewUser');
+
+	// User management
     Route::get('platform/admin/user/edit', '\Platform\Controllers\App\UserController@showEditUser');
     Route::post('platform/admin/user/update', '\Platform\Controllers\App\UserController@postUser');
     Route::post('platform/admin/user/delete', '\Platform\Controllers\App\UserController@postUserDelete');
     Route::post('platform/admin/user/upload-avatar', '\Platform\Controllers\App\UserController@postAvatar');
     Route::post('platform/admin/user/delete-avatar', '\Platform\Controllers\App\UserController@postDeleteAvatar');
     Route::get('platform/admin/user/login-as/{sl}', '\Platform\Controllers\App\UserController@getLoginAs');
-  });
-
-  // For owners and resellers
-  Route::group(['middleware' => 'role:owner,reseller'], function () {
-
-	// New user is owner and reseller only
-    Route::get('platform/admin/user/new', '\Platform\Controllers\App\UserController@showNewUser');
-    Route::post('platform/admin/user/new', '\Platform\Controllers\App\UserController@postNewUser');
 
   });
 

@@ -90,11 +90,15 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
   },
   {
     data: "metatag"
-  },{
+  },
+  <?php if (\Gate::allows('reseller-management')) { ?>
+  {
     data: "sl",
     width: 74,
     sortable: false
-  }],
+  }
+  <?php } ?>
+  ],
   fnDrawCallback: function() {
     onDataTableLoad();
   },
@@ -140,6 +144,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
       },
       targets: <?php echo (\Gate::allows('owner-management')) ? '10' : '9'; ?>
     },
+    <?php if (\Gate::allows('reseller-management')) { ?>
     {
       render: function (data, type, row) {
         var disabled = (row.undeletable == '1') ? ' disabled' : '';
@@ -157,6 +162,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
       },
       targets: <?php echo (\Gate::allows('owner-management')) ? '12' : '11'; ?> /* Column to re-render */
     },
+    <?php } ?>
   ],
   language: {
     search: "",
@@ -197,7 +203,7 @@ $('#dt-table-admin_users_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.created') }}</th>
         <th class="text-center">{{ trans('global.active') }}</th>
         <th>{{ trans('global.metatag') }}</th>
-        <th class="text-center">{{ trans('global.actions') }}</th>
+<?php if (\Gate::allows('reseller-management')) { ?><th class="text-center">{{ trans('global.actions') }}</th><?php } ?>
       </tr>
       </thead>
     </table>
