@@ -19,9 +19,13 @@
 
       <div class="list-group">
         <a href="#/profile" class="list-group-item active">{{ trans('global.profile') }}</a>
-<?php if (Gate::allows('limitation', 'account.plan_visible')) { ?>
+<?php
+    if (\Gate::allows('reseller-management')) {
+    if (Gate::allows('limitation', 'account.plan_visible')) { ?>
         <a href="#/plan" class="list-group-item">{{ trans('global.plan') }}</a>
-<?php } ?>
+<?php }
+    }
+?>
       </div>
 
     </div>
@@ -37,11 +41,11 @@
             <fieldset>
               <div class="form-group">
                 <label for="email">{{ trans('global.name') }}</label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ $user->name }}" required autocomplete="off">
+                <input type="text" class="form-control" name="name" id="name" value="{{ $user->name }}" required autocomplete="off" <?php echo \Gate::allows('reseller-management')?  '' :'readonly'?>>
               </div>
               <div class="form-group">
                 <label for="email">{{ trans('global.email_address') }}</label>
-                <input type="email" class="form-control" name="email" id="email" value="{{ $user->email }}" required autocomplete="off">
+                <input type="email" class="form-control" name="email" id="email" value="{{ $user->email }}" required autocomplete="off" <?php echo \Gate::allows('reseller-management')?  '' :'readonly'?>>
               </div>
               <div class="form-group">
                 <label for="new_password">{{ trans('global.new_password') }}</label>

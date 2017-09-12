@@ -74,9 +74,13 @@ foreach ($active_modules as $module) {
               <li class="dropdown-header text-muted">{{ \Auth::user()->email }}</li>
               <li role="separator" class="divider"><hr></li>
               <li><a href="#/profile"><i class="mi account_circle m-r-5"></i> {{ trans('global.profile') }}</a></li>
-<?php if (Gate::allows('limitation', 'account.plan_visible')) { ?>
+<?php
+    if (\Gate::allows('reseller-management')) {
+    if (Gate::allows('limitation', 'account.plan_visible')) { ?>
               <li><a href="#/plan"><i class="mi credit_card m-r-5"></i> {{ trans('global.plan') }}</a></li>
-<?php } ?>
+<?php }
+    }
+?>
 <?php if (Gate::allows('admin-management')) { ?>
               <li role="separator" class="divider"><hr></li>
               <li class="dropdown-header text-muted">{{ trans('global.admin') }}</li>

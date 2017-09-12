@@ -550,7 +550,8 @@ class UserController extends \App\Http\Controllers\Controller {
       $user->notes = $input['notes'];
 
 
-      if (\Gate::allows('owner-management')) {
+      //if (\Gate::allows('owner-management')) {
+      if (\Gate::allows('reseller-management')) {
         $user->reseller_id = $input['reseller_id'];
         $user->trial_ends_at = ($input['trial_ends_at'] != null) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $input['trial_ends_at'], \Auth::user()->timezone)->tz('UTC') : null;
         $user->expires = ($input['expires'] != null) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $input['expires'], \Auth::user()->timezone)->tz('UTC') : null;
@@ -685,13 +686,15 @@ class UserController extends \App\Http\Controllers\Controller {
         $user->notes = $input['notes'];
 
 
-        if ($qs['user_id'] > 1 && \Gate::allows('owner-management')) 
+        //if ($qs['user_id'] > 1 && \Gate::allows('owner-management'))
+        if ($qs['user_id'] > 1 && \Gate::allows('reseller-management'))
         {
           $user->plan_id = (is_numeric($input['plan_id'])) ? $input['plan_id'] : null;
           $user->active = $input['active'];
           if ($input['role'] != null) $user->role = $input['role'];
 
-          if (\Gate::allows('owner-management')) {
+          //if (\Gate::allows('owner-management')) {
+          if (\Gate::allows('reseller-management')) {
             if ($input['reseller_id'] != null) $user->reseller_id = $input['reseller_id'];
             $user->trial_ends_at = ($input['trial_ends_at'] != null) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $input['trial_ends_at'], \Auth::user()->timezone)->tz('UTC') : null;
             $user->expires = ($input['expires'] != null) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $input['expires'], \Auth::user()->timezone)->tz('UTC') : null;
@@ -762,7 +765,8 @@ class UserController extends \App\Http\Controllers\Controller {
    */
   public function postUserDelete()
   {
-    if (! \Gate::allows('owner-management')) return;
+    //if (! \Gate::allows('owner-management')) return;
+    if (! \Gate::allows('reseller-management')) return;
 
     $sl = request()->input('sl', '');
 
@@ -828,7 +832,8 @@ class UserController extends \App\Http\Controllers\Controller {
 
     if (\Auth::user()->role == 'admin')
     {
-      $sql_role = "role <> 'admin' AND role <> 'owner'";
+      //$sql_role = "role <> 'admin' AND role <> 'owner'";
+      $sql_role = "role <> 'owner'";
     }
 
     $order_by = $request->input('order.0.column', 0);

@@ -17,7 +17,11 @@
             <a class="navbar-brand no-link" href="javascript:void(0);">\</a>
             <a class="navbar-brand no-link" href="javascript:void(0);">{{ trans('global.users') }}</a>
           </div>
-<?php if (Gate::allows('owner-management')) { ?>
+<?php
+    //if (Gate::allows('owner-management')) {
+    if (Gate::allows('reseller-management')) {
+
+    ?>
           <div class="collapse navbar-collapse" id="bs-title-navbar">
 
             <div class="navbar-form navbar-right">
@@ -86,11 +90,15 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
   },
   {
     data: "metatag"
-  },{
+  },
+  <?php if (\Gate::allows('reseller-management')) { ?>
+  {
     data: "sl",
     width: 74,
     sortable: false
-  }],
+  }
+  <?php } ?>
+  ],
   fnDrawCallback: function() {
     onDataTableLoad();
   },
@@ -136,6 +144,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
       },
       targets: <?php echo (\Gate::allows('owner-management')) ? '10' : '9'; ?>
     },
+    <?php if (\Gate::allows('reseller-management')) { ?>
     {
       render: function (data, type, row) {
         var disabled = (row.undeletable == '1') ? ' disabled' : '';
@@ -143,13 +152,17 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
         return '<div class="row-actions-wrap"><div class="text-center row-actions" data-sl="' + data + '">' + 
           '<a href="<?php echo url('platform/admin/user/login-as') ?>/' + data + '" class="btn btn-xs btn-primary row-btn-login" data-toggle="tooltip" title="{{ trans('global.login') }}"><i class="fa fa-sign-in"></i></a> ' + 
           '<a href="#/admin/user/' + data + '" class="btn btn-xs btn-inverse row-btn-edit" data-toggle="tooltip" title="{{ trans('global.edit') }}"><i class="fa fa-pencil"></i></a> ' + 
-<?php if (\Gate::allows('owner-management')) { ?>
+<?php
+    //if (\Gate::allows('owner-management')) {
+    if (\Gate::allows('reseller-management')) {
+?>
           '<a href="javascript:void(0);" class="btn btn-xs btn-danger' + btn_delete + '" data-toggle="tooltip" title="{{ trans('global.delete') }}"' + disabled + '><i class="fa fa-trash"></i></a>' + 
 <?php } ?>
           '</div></div>';
       },
       targets: <?php echo (\Gate::allows('owner-management')) ? '12' : '11'; ?> /* Column to re-render */
     },
+    <?php } ?>
   ],
   language: {
     search: "",
@@ -190,7 +203,7 @@ $('#dt-table-admin_users_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.created') }}</th>
         <th class="text-center">{{ trans('global.active') }}</th>
         <th>{{ trans('global.metatag') }}</th>
-        <th class="text-center">{{ trans('global.actions') }}</th>
+<?php if (\Gate::allows('reseller-management')) { ?><th class="text-center">{{ trans('global.actions') }}</th><?php } ?>
       </tr>
       </thead>
     </table>
