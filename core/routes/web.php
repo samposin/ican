@@ -140,6 +140,15 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('platform/admin/user/login-as/{sl}', '\Platform\Controllers\App\UserController@getLoginAs');
   });
 
+  // For owners and resellers
+  Route::group(['middleware' => 'role:owner,reseller'], function () {
+
+	// New user is owner and reseller only
+    Route::get('platform/admin/user/new', '\Platform\Controllers\App\UserController@showNewUser');
+    Route::post('platform/admin/user/new', '\Platform\Controllers\App\UserController@postNewUser');
+
+  });
+
   // For owners only
   Route::group(['middleware' => 'role:owner'], function () {
 
@@ -152,9 +161,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('platform/admin/reseller/update', '\Platform\Controllers\App\ResellerController@postReseller');
     Route::post('platform/admin/reseller/delete', '\Platform\Controllers\App\ResellerController@postResellerDelete');
 
-    // New user is owner only
-    Route::get('platform/admin/user/new', '\Platform\Controllers\App\UserController@showNewUser');
-    Route::post('platform/admin/user/new', '\Platform\Controllers\App\UserController@postNewUser');
+
 
     // Plan management
     Route::get('platform/admin/plans', '\Platform\Controllers\App\PlanController@showPlans');

@@ -17,7 +17,11 @@
             <a class="navbar-brand no-link" href="javascript:void(0);">\</a>
             <a class="navbar-brand no-link" href="javascript:void(0);">{{ trans('global.users') }}</a>
           </div>
-<?php if (Gate::allows('owner-management')) { ?>
+<?php
+    //if (Gate::allows('owner-management')) {
+    if (Gate::allows('reseller-management')) {
+
+    ?>
           <div class="collapse navbar-collapse" id="bs-title-navbar">
 
             <div class="navbar-form navbar-right">
@@ -143,7 +147,10 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
         return '<div class="row-actions-wrap"><div class="text-center row-actions" data-sl="' + data + '">' + 
           '<a href="<?php echo url('platform/admin/user/login-as') ?>/' + data + '" class="btn btn-xs btn-primary row-btn-login" data-toggle="tooltip" title="{{ trans('global.login') }}"><i class="fa fa-sign-in"></i></a> ' + 
           '<a href="#/admin/user/' + data + '" class="btn btn-xs btn-inverse row-btn-edit" data-toggle="tooltip" title="{{ trans('global.edit') }}"><i class="fa fa-pencil"></i></a> ' + 
-<?php if (\Gate::allows('owner-management')) { ?>
+<?php
+    //if (\Gate::allows('owner-management')) {
+    if (\Gate::allows('reseller-management')) {
+?>
           '<a href="javascript:void(0);" class="btn btn-xs btn-danger' + btn_delete + '" data-toggle="tooltip" title="{{ trans('global.delete') }}"' + disabled + '><i class="fa fa-trash"></i></a>' + 
 <?php } ?>
           '</div></div>';

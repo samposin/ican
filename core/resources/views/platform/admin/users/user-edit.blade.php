@@ -66,7 +66,10 @@
 <?php } ?>
 <?php } ?>
 
-<?php if (\Gate::allows('owner-management')) { ?>
+<?php
+    //if (\Gate::allows('owner-management')) {
+    if (\Gate::allows('reseller-management')) {
+?>
 <?php
 $field_name = 'trial_ends_at';
 $datetime_value = $user->trial_ends_at;
@@ -240,6 +243,9 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
                   <label for="mail_login"> {{ trans('global.mail_login_update') }}</label>
                 </div>
               </div>
+              <?php
+                if (\Gate::allows('owner-management')) {
+              ?>
               <div class="form-group">
                 <div class="checkbox checkbox-primary">
                   <input name="active" id="active" type="checkbox" value="1"<?php if($user->active == 1) echo ' checked'; ?><?php if($user->id == 1) echo ' disabled'; ?>>
@@ -247,6 +253,15 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
                 </div>
               </div>
               <p class="text-muted">{{ trans('global.active_user_desc') }}</p>
+              <?php
+                }
+                else
+                {
+                ?>
+                    <input type="hidden" name="active" value="<?php if($user->active == 1) echo '1'; ?>" />
+                <?php
+                }
+              ?>
                 <div class="form-group">
                     <label for="metatag">{{ trans('global.metatag') }}</label>
                     <input type="text" class="form-control" id="metatag" name="metatag" value="{{ $user->metatag }}">

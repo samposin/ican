@@ -56,7 +56,10 @@
             </div>
 <?php } ?>
 
-<?php if (\Gate::allows('owner-management')) { ?>
+<?php
+    //if (\Gate::allows('owner-management')) {
+    if (\Gate::allows('reseller-management')) {
+    ?>
 <?php
 $field_name = 'trial_ends_at';
 $datetime_value = \Carbon\Carbon::now()->addDays(14)->timezone(\Auth::user()->timezone)->format('Y-m-d H:i:s');
@@ -236,6 +239,10 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
                 <label for="mail_login"> {{ trans('global.mail_login') }}</label>
               </div>
             </div>
+            <?php
+                if (\Gate::allows('owner-management')) {
+            ?>
+
             <div class="form-group">
               <div class="checkbox checkbox-primary">
                 <input name="active" id="active" type="checkbox" value="1" checked>
@@ -243,6 +250,9 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
               </div>
               <p class="text-muted">{{ trans('global.active_user_desc') }}</p>
             </div>
+            <?php
+                }
+            ?>
             <div class="form-group">
               <label for="metatag">{{ trans('global.metatag') }}</label>
                 <input type="text" class="form-control" id="metatag" name="metatag">
