@@ -334,13 +334,21 @@ class UserController extends \App\Http\Controllers\Controller {
   /**
    * New user
    */
-  public function showNewUser()
-  {
-    if (\Gate::allows('owner-management')) {
-      $resellers = \App\Reseller::orderBy('name')->get();
-    } else {
-      $resellers = null;
-    }
+	public function showNewUser()
+    {
+        if (\Gate::allows('owner-management'))
+        {
+            $resellers = \App\Reseller::orderBy('name')->get();
+            //$admins=\App\User::where('role','=','admin')->orderBy('name')->get();
+            $reseller_id = Core\Reseller::get()->id;
+            $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
+        }
+        else
+        {
+            $resellers = null;
+            $reseller_id = Core\Reseller::get()->id;
+            $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
+        }
 
     if (\Gate::allows('admin-management')) {
       $plans = \App\Plan::select([\DB::raw('CONCAT(resellers.name, " - ", plans.name) AS name'), 'plans.id', 'resellers.active as reseller_active', 'plans.active as plan_active'])->leftjoin('resellers', 'resellers.id', '=', 'plans.reseller_id')->orderBy('resellers.name', 'ASC')->orderBy('plans.order', 'ASC')->get();
@@ -360,7 +368,7 @@ class UserController extends \App\Http\Controllers\Controller {
 
     $default_plan = \App\Plan::where('active', 1)->where('default', 1)->first();
 
-    return view('platform.admin.users.user-new', compact('resellers', 'plans', 'plans_list', 'default_plan'));
+    return view('platform.admin.users.user-new', compact('resellers', 'plans', 'plans_list', 'default_plan','admins'));
   }
 
   /**
@@ -374,11 +382,19 @@ class UserController extends \App\Http\Controllers\Controller {
       $qs = Core\Secure::string2array($sl);
       $user = \App\User::where('id', $qs['user_id'])->first();
 
-      if (\Gate::allows('owner-management')) {
-        $resellers = \App\Reseller::orderBy('name')->get();
-      } else {
-        $resellers = null;
-      }
+			if (\Gate::allows('owner-management'))
+			{
+                $resellers = \App\Reseller::orderBy('name')->get();
+                //$admins=\App\User::where('role','=','admin')->orderBy('name')->get();
+                $reseller_id = Core\Reseller::get()->id;
+                $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
+            }
+            else
+            {
+                $resellers = null;
+                $reseller_id = Core\Reseller::get()->id;
+                $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
+            }
 
       if (\Gate::allows('admin-management')) {
         $plans = \App\Plan::select([\DB::raw('CONCAT(resellers.name, " - ", plans.name) AS name'), 'plans.id', 'resellers.active as reseller_active', 'plans.active as plan_active'])->leftjoin('resellers', 'resellers.id', '=', 'plans.reseller_id')->orderBy('resellers.name', 'ASC')->orderBy('plans.order', 'ASC')->get();
@@ -396,7 +412,7 @@ class UserController extends \App\Http\Controllers\Controller {
         $plans = null;
       }
 
-      return view('platform.admin.users.user-edit', compact('sl', 'user', 'resellers', 'plans', 'plans_list'));
+      return view('platform.admin.users.user-edit', compact('sl', 'user', 'resellers', 'plans', 'plans_list','admins'));
     }
   }
 
@@ -493,6 +509,7 @@ class UserController extends \App\Http\Controllers\Controller {
       'linked_in_url' =>request()->input('linked_in_url', null),
       'youtube_url' =>request()->input('youtube_url', null),
 	  'notes' =>request()->input('notes', null),
+	  'admin_id' =>request()->input('admin_id', null),
 
 
 
@@ -548,6 +565,15 @@ class UserController extends \App\Http\Controllers\Controller {
       $user->linked_in_url = $input['linked_in_url'];
       $user->youtube_url = $input['youtube_url'];
       $user->notes = $input['notes'];
+
+      $user->admin_id =NULL;
+      if($input['role']=='user')
+      {
+        if($input['admin_id']!=null)
+        {
+            $user->admin_id =$input['admin_id'];
+        }
+      }
 
 
       //if (\Gate::allows('owner-management')) {
@@ -639,6 +665,7 @@ class UserController extends \App\Http\Controllers\Controller {
         'linked_in_url' =>request()->input('linked_in_url', null),
         'youtube_url' =>request()->input('youtube_url', null),
 	    'notes' =>request()->input('notes', null),
+	    'admin_id' =>request()->input('admin_id', null),
       );
 
       $rules = array(
@@ -684,6 +711,15 @@ class UserController extends \App\Http\Controllers\Controller {
         $user->linked_in_url = $input['linked_in_url'];
         $user->youtube_url = $input['youtube_url'];
         $user->notes = $input['notes'];
+
+        $user->admin_id =NULL;
+        if($input['role']=='user')
+        {
+            if($input['admin_id']!=null)
+            {
+                $user->admin_id =$input['admin_id'];
+            }
+        }
 
 
         //if ($qs['user_id'] > 1 && \Gate::allows('owner-management'))
@@ -787,6 +823,8 @@ class UserController extends \App\Http\Controllers\Controller {
 
       if(! empty($user))
       {
+        $user_role=$user->role;
+
         $user = \App\User::where('id', '=',  $qs['user_id'])->forceDelete();
 
         $user_id_hash = Core\Secure::staticHash($qs['user_id']);
@@ -808,6 +846,13 @@ class UserController extends \App\Http\Controllers\Controller {
         // Delete user form entries table if exist
         $tbl_name = 'x_form_entries_' . $qs['user_id'];
         Schema::dropIfExists($tbl_name);
+
+        if($user_role=='admin')
+        {
+	        //If this user assigned as admin then removes from all users
+	        $update = \App\User::where('admin_id', $qs['user_id'])->update(['admin_id' => null]);
+        }
+
       }
       else
       {
@@ -833,7 +878,8 @@ class UserController extends \App\Http\Controllers\Controller {
     if (\Auth::user()->role == 'admin')
     {
       //$sql_role = "role <> 'admin' AND role <> 'owner'";
-      $sql_role = "role <> 'owner'";
+      $sql_role = "admin_id=".auth()->user()->id;
+
     }
 
     $order_by = $request->input('order.0.column', 0);
@@ -883,8 +929,13 @@ class UserController extends \App\Http\Controllers\Controller {
     else
     {
       $count = \App\User::leftJoin('resellers as r', 'r.id', '=', 'reseller_id')->whereRaw($sql_reseller)->whereRaw($sql_role)->where('parent_id', '=', null)->select(array('users.*', 'r.name as reseller_name', 'r.favicon as favicon'))->count();
-      $oData = \App\User::orderBy($aColumn[$order_by], $order)->leftJoin('resellers as r', 'r.id', '=', 'reseller_id')->whereRaw($sql_reseller)->whereRaw($sql_role)->where('parent_id', '=', null)->select(array('users.*', 'r.name as reseller_name', 'r.favicon as favicon'))->take($length)->skip($start)->get();
+      $oData = \App\User::with('admin')->orderBy($aColumn[$order_by], $order)->leftJoin('resellers as r', 'r.id', '=', 'reseller_id')->whereRaw($sql_reseller)->whereRaw($sql_role)->where('parent_id', '=', null)->select(array('users.*', 'r.name as reseller_name', 'r.favicon as favicon'))->take($length)->skip($start)->get();
     }
+
+
+    //echo '<pre>';
+    //print_r($oData->toArray());
+    //die();
 
     if($length == -1) $length = $count;
 
@@ -909,6 +960,10 @@ class UserController extends \App\Http\Controllers\Controller {
         $reseller = '-';
       }
 
+      $admin_name='';
+      if(isset($row->admin->name))
+        $admin_name=$row->admin->name;
+
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,
         'reseller' => $reseller,
@@ -919,6 +974,7 @@ class UserController extends \App\Http\Controllers\Controller {
         'role_name' => $row->role,
         'role' => trans('global.roles.' . $row->role),
         'metatag' => $row->metatag,
+        'admin'=>$admin_name,
         'logins' => $row->logins,
         'last_login' => $last_login,
         'trial_ends_at' => $trial_ends_at,
@@ -939,4 +995,48 @@ class UserController extends \App\Http\Controllers\Controller {
 
     echo json_encode($response);
   }
+
+  /**
+   * Get user data
+   */
+	public function getResellersAdmins($reseller_id,Request $request)
+    {
+
+	    if (\Gate::allows('owner-management')) {
+	        $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
+	    } else {
+	        $resellers = null;
+	        $reseller_id = Core\Reseller::get()->id;
+	        $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
+	    }
+
+	    $data=array();
+
+	    if(count($admins)>0)
+	    {
+	        foreach($admins as $admin)
+	        {
+		        $data[] = array('id' =>$admin->id,'name'=>$admin->name);
+	        }
+	    }
+
+	    $admin_id=0;
+	    $user_reseller_id=0;
+
+	    if($user_id=$request->input('user_id', 0))
+	    {
+	        $user = \App\User::where('id', $user_id)->first();
+
+	        $admin_id=$user->admin_id;
+	        $user_reseller_id=$user->reseller_id;
+	    }
+
+	    $response = array(
+	      'success' => true,
+	      'info' => array('data'=>$data,'admin_id'=>$admin_id,'user_reseller_id'=>$user_reseller_id)
+	    );
+
+	    echo json_encode($response);
+
+    }
 }

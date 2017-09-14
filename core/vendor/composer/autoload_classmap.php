@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'AddFieldsChanges1ToUsers' => $baseDir . '/database/migrations/2017_09_07_135600_add_fields_changes_1_to_users.php',
+    'AddAdminIdToUsers' => $baseDir . '/database/migrations/2017_09_13_130800_add_admin_id_to_users.php',
     'AddFieldsChangesOneToUsers' => $baseDir . '/database/migrations/2017_09_07_135736_add_fields_changes_one_to_users.php',
     'Callback' => $vendorDir . '/electrolinux/phpquery/phpQuery/phpQuery/Callback.php',
     'CallbackBody' => $vendorDir . '/electrolinux/phpquery/phpQuery/phpQuery/Callback.php',

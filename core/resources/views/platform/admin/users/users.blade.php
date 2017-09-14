@@ -66,9 +66,12 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
     data: "email"
   }, {
     data: "role",
+     width: 70,
+     class:'text-center',
     sortable: false
   }, {
-    data: "logins"
+    data: "logins",
+     width: 50
   }, {
     data: "last_login",
     width: 90
@@ -86,10 +89,13 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
     width: 90
   }, {
     data: "active",
-    width: 60
+    width: 50
   },
   {
     data: "metatag"
+  },
+  {
+    data: "admin"
   },
   <?php if (\Gate::allows('reseller-management')) { ?>
   {
@@ -160,7 +166,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
 <?php } ?>
           '</div></div>';
       },
-      targets: <?php echo (\Gate::allows('owner-management')) ? '12' : '11'; ?> /* Column to re-render */
+      targets: <?php echo (\Gate::allows('owner-management')) ? '13' : '12'; ?> /* Column to re-render */
     },
     <?php } ?>
   ],
@@ -203,6 +209,7 @@ $('#dt-table-admin_users_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.created') }}</th>
         <th class="text-center">{{ trans('global.active') }}</th>
         <th>{{ trans('global.metatag') }}</th>
+        <th>{{ trans('global.admin') }}</th>
 <?php if (\Gate::allows('reseller-management')) { ?><th class="text-center">{{ trans('global.actions') }}</th><?php } ?>
       </tr>
       </thead>

@@ -14,7 +14,8 @@ class UserEventSubscriber {
    */
   public function onUserLogin($event) {
     // Check if user active
-    if ($event->user->role != 'member' && $event->user->logins > 0 && $event->user->active == 0) {
+    //if ($event->user->role != 'member' && $event->user->logins > 0 && $event->user->active == 0) {
+    if ($event->user->role != 'member' && $event->user->active == 0) {
       \Auth::guard('web')->logout();
     }
 
