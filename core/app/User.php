@@ -96,6 +96,10 @@ class User extends Authenticatable implements StaplerableInterface
     return $this->belongsTo('\App\User', 'parent_id');
   }
 
+  public function admin() {
+    return $this->belongsTo('\App\User', 'admin_id');
+  }
+
   public function childUsers() {
     return $this->hasMany('\App\User', 'parent_id');
   }

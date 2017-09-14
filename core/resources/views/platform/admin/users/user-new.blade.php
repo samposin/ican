@@ -210,6 +210,31 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
           </fieldset>
         </div>
 <?php } ?>
+<?php if (\Gate::allows('reseller-management')) { ?>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ trans('global.reseller') }}</h3>
+          </div>
+          <fieldset class="panel-body">
+
+<?php if (\Gate::allows('reseller-management')) { ?>
+            <div class="form-group">
+<?php
+                  $admins_list = Former::select('admin_id')
+                    ->class('select2-required form-control')
+                    //->placeholder('Select one option...')
+                    ->addOption('Please Select Admin')
+                    ->name('admin_id')
+                    ->fromQuery($admins, 'name', 'id')
+                    ->label(trans('global.admin'));
+
+                  echo $admins_list;
+?>
+            </div>
+<?php } ?>
+          </fieldset>
+        </div>
+<?php } ?>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">{{ trans('global.general') }}</h3>
@@ -395,6 +420,45 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
   
 </div>
 <script>
+    <?php if (\Gate::allows('owner-management')) { ?>
+    $(document).ready(function(){
+
+        $('#reseller_id').on('change', function() {
+
+            var reseller_id=this.value;
+
+            var jqxhr = $.ajax({
+                url: "{{ url('platform/admin/users/admin-role/reseller/') }}/"+reseller_id,
+                data: {user_id: 0},
+                method: 'GET',
+                dataType:'json'
+            })
+            .done(function(data) {
+
+                $("#admin_id").empty();
+                $("#admin_id").append('<option value="">Please Select Admin</option>');
+
+                if(data.success)
+                {
+                    for(var i=0;i<data.info.data.length;i++)
+                    {
+                        $("#admin_id").append('<option value="'+data.info.data[i].id+'">'+data.info.data[i].name+'</option>')
+                    }
+                }
+
+                $("#admin_id").trigger('change');
+                //$("#admin_id").empty().append('<option value="id">text</option>').val('id').trigger('change');
+            })
+            .fail(function() {
+                console.log('error');
+            })
+            .always(function() {
+                //unblockUI();
+            });
+        });
+    });
+    <?php } ?>
+
   $('#show_password').on('click', function()
   {
     if(! $(this).hasClass('active'))

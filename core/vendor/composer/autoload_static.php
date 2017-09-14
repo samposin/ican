@@ -621,7 +621,7 @@ class ComposerStaticInit2d8dcb9a1061d751a69d1cbc4732b38e
     );
 
     public static $classMap = array (
-        'AddFieldsChanges1ToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_09_07_135600_add_fields_changes_1_to_users.php',
+        'AddAdminIdToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_09_13_130800_add_admin_id_to_users.php',
         'AddFieldsChangesOneToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_09_07_135736_add_fields_changes_one_to_users.php',
         'Callback' => __DIR__ . '/..' . '/electrolinux/phpquery/phpQuery/phpQuery/Callback.php',
         'CallbackBody' => __DIR__ . '/..' . '/electrolinux/phpquery/phpQuery/phpQuery/Callback.php',

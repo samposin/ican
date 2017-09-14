@@ -157,6 +157,8 @@ Route::group(['middleware' => 'auth:web'], function () {
   // For owners only
   Route::group(['middleware' => 'role:owner'], function () {
 
+    Route::get('platform/admin/users/admin-role/reseller/{reseller_id}', '\Platform\Controllers\App\UserController@getResellersAdmins');
+
     // Reseller management
     Route::get('platform/admin/resellers', '\Platform\Controllers\App\ResellerController@showResellers');
     Route::get('platform/admin/resellers/data', '\Platform\Controllers\App\ResellerController@getResellerData');

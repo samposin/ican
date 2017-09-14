@@ -24,7 +24,7 @@
         <ul class="nav nav-tabs navtab-custom">
           <li class="active"> <a href="#general" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-user" aria-hidden="true"></i></span> <span class="hidden-xs">{{ trans('global.general') }}</span> </a> </li>
           <li> <a href="#localization" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-globe" aria-hidden="true"></i></span> <span class="hidden-xs">{{ trans('global.localization') }}</span> </a> </li>
-<?php if (\Gate::allows('owner-management')) { ?>
+<?php if (\Gate::allows('reseller-management')) { ?>
           <li> <a href="#role" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-globe" aria-hidden="true"></i></span> <span class="hidden-xs">{{ trans('global.role') }}</span> </a> </li>
 <?php } ?>
         </ul>
@@ -217,6 +217,23 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
 </script>
 
 <?php } ?>
+<?php if (\Gate::allows('reseller-management')) { ?>
+            <hr>
+            <div class="form-group">
+<?php
+                  $admins_list = Former::select('admin_id')
+                    ->class('select2-required form-control')
+                    //->placeholder('Select one option...')
+                    ->addOption('Please Select Admin')
+                    ->name('admin_id')
+                    ->forceValue($user->admin_id)
+                    ->fromQuery($admins, 'name', 'id')
+                    ->label(trans('global.admin'));
+
+                  echo $admins_list;
+?>
+            </div>
+<?php } ?>
               <hr>
               <div class="form-group">
                 <label for="name">{{ trans('global.name') }} <sup>*</sup></label>
@@ -360,7 +377,7 @@ $time_data_value = ($datetime_value == null) ? '' : \Carbon\Carbon::parse($datet
               </div>
             </fieldset>
           </div>
-<?php if (\Gate::allows('owner-management')) { ?>
+<?php if (\Gate::allows('reseller-management')) { ?>
           <div class="tab-pane" id="role">
             <fieldset>
               <div class="form-group">
@@ -473,6 +490,54 @@ $('#remove_avatar').on('click', function() {
   
 </div>
 <script>
+    <?php if (\Gate::allows('owner-management')) { ?>
+    $(document).ready(function(){
+
+        $('#reseller_id').on('change', function() {
+
+            var reseller_id=this.value;
+
+            var user_id='{{$user->id}}';
+
+            var jqxhr = $.ajax({
+                url: "{{ url('platform/admin/users/admin-role/reseller/') }}/"+reseller_id,
+                data: {user_id: user_id},
+                method: 'GET',
+                dataType:'json'
+            })
+            .done(function(data) {
+
+                $("#admin_id").empty();
+                $("#admin_id").append('<option value="">Please Select Admin</option>');
+
+                if(data.success)
+                {
+                    for(var i=0;i<data.info.data.length;i++)
+                    {
+                        $("#admin_id").append('<option value="'+data.info.data[i].id+'">'+data.info.data[i].name+'</option>')
+                    }
+                }
+
+                if(data.info.admin_id)
+                {
+                    if(data.info.user_reseller_id==reseller_id){
+                        $("#admin_id").val(data.info.admin_id);
+                    }
+                }
+
+                $("#admin_id").trigger('change');
+                //$("#admin_id").empty().append('<option value="id">text</option>').val('id').trigger('change');
+            })
+            .fail(function() {
+                console.log('error');
+            })
+            .always(function() {
+                //unblockUI();
+            });
+        });
+    });
+    <?php } ?>
+
   $('#show_password').on('click', function()
   {
     if(! $(this).hasClass('active'))
