@@ -386,7 +386,8 @@ class UserController extends \App\Http\Controllers\Controller {
 			{
                 $resellers = \App\Reseller::orderBy('name')->get();
                 //$admins=\App\User::where('role','=','admin')->orderBy('name')->get();
-                $reseller_id = Core\Reseller::get()->id;
+                //$reseller_id = Core\Reseller::get()->id;
+                $reseller_id=$user->reseller_id;
                 $admins=\App\User::where('reseller_id',$reseller_id)->where('role','=','admin')->orderBy('name')->get();
             }
             else
