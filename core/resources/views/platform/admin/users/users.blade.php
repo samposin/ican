@@ -69,7 +69,9 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
      width: 70,
      class:'text-center',
     sortable: false
-  }, {
+  }, <?php if (\Gate::allows('reseller-management')) { ?>{
+    data: "admin"
+  },<?php } ?>{
     data: "logins",
      width: 50
   }, {
@@ -94,10 +96,8 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
   {
     data: "metatag"
   },
-  {
-    data: "admin"
-  },
-  <?php if (\Gate::allows('reseller-management')) { ?>
+
+  <?php if (\Gate::allows('admin-management')) { ?>
   {
     data: "sl",
     width: 74,
@@ -122,13 +122,13 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
       render: function (data, type, row) {
         return '<div data-moment="fromNowDateTime">' + data + '</div>';
       },
-      targets: [<?php echo (\Gate::allows('owner-management')) ? '5, 6, 8, 9' : '4, 5, 7, 8'; ?>] /* Column to re-render */
+      targets: [<?php echo (\Gate::allows('owner-management')) ? '6, 7, 9, 10' : ((\Gate::allows('reseller-management')) ? '5, 6, 8, 9' : '4, 5, 7, 8'); ?>] /* Column to re-render */
     },
     {
       render: function (data, type, row) {
         return '<div class="text-center">' + data + '</div>';
       },
-      targets: [<?php echo (\Gate::allows('owner-management')) ? '4' : '3'; ?>] /* Column to re-render */
+      targets: [<?php echo (\Gate::allows('owner-management')) ? '5' : ((\Gate::allows('reseller-management')) ? '4' : '3'); ?>] /* Column to re-render */
     },
     {
       render: function (data, type, row) {
@@ -138,7 +138,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
           return row.role;
         }
       },
-      targets: <?php echo (\Gate::allows('owner-management')) ? '4' : '3'; ?>
+      targets: <?php echo (\Gate::allows('owner-management')) ? '5' : ((\Gate::allows('reseller-management')) ? '4' : '3'); ?>
     },
     {
       render: function (data, type, row) {
@@ -148,25 +148,25 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
           return '<div class="text-center"><i class="fa fa-times" aria-hidden="true"></i></div>';
         }
       },
-      targets: <?php echo (\Gate::allows('owner-management')) ? '10' : '9'; ?>
+      targets: <?php echo (\Gate::allows('owner-management')) ? '11' :  ((\Gate::allows('reseller-management')) ? '10' :'9'); ?>
     },
-    <?php if (\Gate::allows('reseller-management')) { ?>
+    <?php if (\Gate::allows('admin-management')) { ?>
     {
       render: function (data, type, row) {
         var disabled = (row.undeletable == '1') ? ' disabled' : '';
         var btn_delete = (disabled) ? '' : ' row-btn-delete';
         return '<div class="row-actions-wrap"><div class="text-center row-actions" data-sl="' + data + '">' + 
           '<a href="<?php echo url('platform/admin/user/login-as') ?>/' + data + '" class="btn btn-xs btn-primary row-btn-login" data-toggle="tooltip" title="{{ trans('global.login') }}"><i class="fa fa-sign-in"></i></a> ' + 
-          '<a href="#/admin/user/' + data + '" class="btn btn-xs btn-inverse row-btn-edit" data-toggle="tooltip" title="{{ trans('global.edit') }}"><i class="fa fa-pencil"></i></a> ' + 
 <?php
     //if (\Gate::allows('owner-management')) {
     if (\Gate::allows('reseller-management')) {
 ?>
-          '<a href="javascript:void(0);" class="btn btn-xs btn-danger' + btn_delete + '" data-toggle="tooltip" title="{{ trans('global.delete') }}"' + disabled + '><i class="fa fa-trash"></i></a>' + 
+          '<a href="#/admin/user/' + data + '" class="btn btn-xs btn-inverse row-btn-edit" data-toggle="tooltip" title="{{ trans('global.edit') }}"><i class="fa fa-pencil"></i></a> ' +
+          '<a href="javascript:void(0);" class="btn btn-xs btn-danger' + btn_delete + '" data-toggle="tooltip" title="{{ trans('global.delete') }}"' + disabled + '><i class="fa fa-trash"></i></a>' +
 <?php } ?>
           '</div></div>';
       },
-      targets: <?php echo (\Gate::allows('owner-management')) ? '13' : '12'; ?> /* Column to re-render */
+      targets: <?php echo (\Gate::allows('owner-management')) ? '13' : ((\Gate::allows('reseller-management')) ? '12' :'11'); ?> /* Column to re-render */
     },
     <?php } ?>
   ],
@@ -201,6 +201,7 @@ $('#dt-table-admin_users_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.name') }}</th>
         <th>{{ trans('global.email') }}</th>
         <th>{{ trans('global.role') }}</th>
+        <?php if (\Gate::allows('reseller-management')) { ?><th>{{ trans('global.admin') }}</th><?php } ?>
         <th class="text-center">{{ trans('global.logins') }}</th>
         <th>{{ trans('global.last_login') }}</th>
         <th>{{ trans('global.trial_expires') }}</th>
@@ -209,8 +210,8 @@ $('#dt-table-admin_users_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.created') }}</th>
         <th class="text-center">{{ trans('global.active') }}</th>
         <th>{{ trans('global.metatag') }}</th>
-        <th>{{ trans('global.admin') }}</th>
-<?php if (\Gate::allows('reseller-management')) { ?><th class="text-center">{{ trans('global.actions') }}</th><?php } ?>
+
+<?php if (\Gate::allows('admin-management')) { ?><th class="text-center">{{ trans('global.actions') }}</th><?php } ?>
       </tr>
       </thead>
     </table>
