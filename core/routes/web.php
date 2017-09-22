@@ -105,8 +105,14 @@ Route::group(['middleware' => 'auth:web'], function () {
   Route::post('platform/profile', '\Platform\Controllers\App\AccountController@postProfile');
   Route::post('platform/profile-avatar', '\Platform\Controllers\App\AccountController@postAvatar');
   Route::post('platform/profile-avatar-delete', '\Platform\Controllers\App\AccountController@postDeleteAvatar');
-  
 
+  // -----------------------------------------------------------------
+  // Plan limitation account.plan_visible
+  Route::group(['middleware' => 'limitation:account.plan_visible'], function () {
+
+    // Plan
+    Route::get('platform/plan', '\Platform\Controllers\App\AccountController@showPlan');
+  });
 
   // -----------------------------------------------------------------
   // Plan limitation media.visible
@@ -132,14 +138,6 @@ Route::group(['middleware' => 'auth:web'], function () {
 
   // For owners and resellers
   Route::group(['middleware' => 'role:owner,reseller'], function () {
-
-	// -----------------------------------------------------------------
-	  // Plan limitation account.plan_visible
-	  Route::group(['middleware' => 'limitation:account.plan_visible'], function () {
-
-	    // Plan
-	    Route::get('platform/plan', '\Platform\Controllers\App\AccountController@showPlan');
-	  });
 
 	// New user is owner and reseller only
     Route::get('platform/admin/user/new', '\Platform\Controllers\App\UserController@showNewUser');

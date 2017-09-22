@@ -38,6 +38,7 @@ if ($plan_count%3 == 0 || $plan_count%4 == 0 || $plan_count%7 == 0) $col_span = 
 
 foreach($all_plans as $plan) {
 ?>
+<?php if ($plan['current'] || \Gate::allows('owner-management')) { ?>
           <article class="pricing-column {{ $col_span }}" style="margin-bottom: 0">
 <?php if ($plan['current']) { ?>
             <div class="ribbon"><span>{{ trans('global.current') }}</span></div>
@@ -107,6 +108,7 @@ foreach($plan['plan_items'] as $item) {
                 </div>
             </div>
           </article>
+<?php } ?>
 <?php
 }
 ?>
