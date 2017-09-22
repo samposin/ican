@@ -19,13 +19,9 @@
 
       <div class="list-group">
         <a href="#/profile" class="list-group-item active">{{ trans('global.profile') }}</a>
-<?php
-    if (\Gate::allows('reseller-management')) {
-    if (Gate::allows('limitation', 'account.plan_visible')) { ?>
+<?php if (Gate::allows('limitation', 'account.plan_visible')) { ?>
         <a href="#/plan" class="list-group-item">{{ trans('global.plan') }}</a>
-<?php }
-    }
-?>
+<?php } ?>
       </div>
 
     </div>
